@@ -3,7 +3,7 @@
   <head>
     <title>R for Data Science With Sports Applications</title>
     <meta charset="utf-8" />
-    <meta name="date" content="2023-09-28" />
+    <meta name="date" content="2023-11-08" />
     <script src="index_files/header-attrs/header-attrs.js"></script>
     <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
@@ -12,7 +12,7 @@
 class: center, middle, inverse, title-slide
 
 # R for Data Science With Sports Applications
-### 2023-09-28
+### 2023-11-08
 
 ---
 
@@ -21,374 +21,135 @@ class: center, middle, inverse, title-slide
 
 
 
-
-
----
-## Visualize
-
-We want to understand the relationship between assists and turnovers.
-
-&lt;img src="index_files/figure-html/unnamed-chunk-1-1.png" width="100%" /&gt;
-
----
-## Grammar of graphics
+## Grammar of graphics: layers of a plot
 
 - Data
 
-- Aesthetic mappings
-
 - Geoms
 
+- Aesthetic mappings
+
+- Facets
+
+
+---
+
+### Data
+
+- The underlying data frame.
+
+- Think rows and columns.
+
+
+---
+### Geoms
+
+- Shapes to represent the data.
+
+- Individual geoms use one shape per row.
+
+- Group geoms use multiple rows to create a shape.
+
+---
+### Aesthetic mappings
+
+- Map between the aesthetic properties of a geom and column of the data.
+
+---
+### Facets
+
+- Also called small multiples.
+
+- Slice the rows into multiple sub populations.
 
 ---
 ### Identify the components of the grammar of graphics
 
+&lt;img src="index_files/figure-html/unnamed-chunk-1-1.png" width="100%" /&gt;
+
+---
+
+&lt;img src="index_files/figure-html/unnamed-chunk-2-1.png" width="100%" /&gt;
+
+---
+### Identify the components (2)
+
+&lt;img src="index_files/figure-html/unnamed-chunk-3-1.png" width="100%" /&gt;
+
+
+---
+&lt;img src="index_files/figure-html/unnamed-chunk-4-1.png" width="100%" /&gt;
+
+
+
+
+---
+
+### Scatter plot: Data
+
+- Call the `ggplot` function and pass in a data frame.
+
+```r
+ggplot(df)
+```
+
+&lt;img src="index_files/figure-html/unnamed-chunk-5-1.png" width="100%" /&gt;
+
+---
+### Scatter plot: Aesthetic mappings
+
+- Pass the aes function with the mapping as a second argument.
 
 
 ```r
-library(trackeR)
-runZones &lt;- zones(runs[1:4], what = "speed", breaks = c(0, 2:6, 12.5))
-plot(runZones)
+ggplot(df, aes(x=AST, y=TOV))
 ```
 
-&lt;img src="index_files/figure-html/unnamed-chunk-2-1.png" width="100%" /&gt;
+&lt;img src="index_files/figure-html/unnamed-chunk-6-1.png" width="100%" /&gt;
+---
+### Scatter plot: Geoms
+
+- Add a layer to use one point to represent one row.
+
+
+
+```r
+ggplot(df, aes(x=AST, y=TOV)) + geom_point()
+```
+
+&lt;img src="index_files/figure-html/unnamed-chunk-7-1.png" width="100%" /&gt;
+
+---
+# More mappings:
+
+- Shape and color
+
+```r
+ggplot(df, aes(x=AST, y=TOV, color=Playoff, shape=Playoff)) + 
+  geom_point()
+```
+
+&lt;img src="index_files/figure-html/unnamed-chunk-8-1.png" width="100%" /&gt;
+
+&lt;!-- ### How to make a barchart --&gt;
+
+&lt;!-- # ```{r} --&gt;
+&lt;!-- # library(ggplot2) --&gt;
+&lt;!-- #  --&gt;
+&lt;!-- # df %&gt;%  --&gt;
+&lt;!-- #   arrange(-PTS) %&gt;%  --&gt;
+&lt;!-- #   head(5) %&gt;%  --&gt;
+&lt;!-- #   ggplot(aes(PTS, Team, fill=Conference)) + --&gt;
+&lt;!-- #   geom_col()  --&gt;
+&lt;!-- # ``` --&gt;
+
 
 ---
 ### Lab 2
 
 - Create a plot to understand the relationship between two pointers made and three pointers made.
 - Think about the data and the aesthetic mappings that you want.
-
-
-
-&lt;!-- ## Typography --&gt;
-
-&lt;!-- Text can be **bold**, _italic_, ~~strikethrough~~, or `inline code`. --&gt;
-
-&lt;!-- [Link to another slide](#colors). --&gt;
-
-&lt;!-- ### Lorem Ipsum --&gt;
-
-&lt;!-- Dolor imperdiet nostra sapien scelerisque praesent curae metus facilisis dignissim tortor.  --&gt;
-&lt;!-- Lacinia neque mollis nascetur neque urna velit bibendum.  --&gt;
-&lt;!-- Himenaeos suspendisse leo varius mus risus sagittis aliquet venenatis duis nec. --&gt;
-
-&lt;!-- - Dolor cubilia nostra nunc sodales --&gt;
-
-&lt;!-- - Consectetur aliquet mauris blandit --&gt;
-
-&lt;!-- - Ipsum dis nec porttitor urna sed --&gt;
-
-&lt;!-- --- --&gt;
-&lt;!-- name: colors --&gt;
-
-&lt;!-- ## Colors --&gt;
-
-&lt;!-- .left-column[ --&gt;
-&lt;!-- Text color --&gt;
-
-&lt;!-- [Link Color](#3) --&gt;
-
-&lt;!-- **Bold Color** --&gt;
-
-&lt;!-- _Italic Color_ --&gt;
-
-&lt;!-- `Inline Code` --&gt;
-&lt;!-- ] --&gt;
-
-&lt;!-- .right-column[ --&gt;
-&lt;!-- Lorem ipsum dolor sit amet, [consectetur adipiscing elit (link)](#3),  --&gt;
-&lt;!-- sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.  --&gt;
-&lt;!-- Erat nam at lectus urna. --&gt;
-&lt;!-- Pellentesque elit ullamcorper **dignissim cras tincidunt (bold)** lobortis feugiat.  --&gt;
-&lt;!-- _Eros donec ac odio tempor_ orci dapibus ultrices.  --&gt;
-&lt;!-- Id porta nibh venenatis cras sed felis eget velit aliquet. --&gt;
-&lt;!-- Aliquam id diam maecenas ultricies mi. --&gt;
-&lt;!-- Enim sit amet  --&gt;
-&lt;!-- `code_color("inline")` --&gt;
-&lt;!-- venenatis urna cursus eget nunc scelerisque viverra. --&gt;
-&lt;!-- ] --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- # Big Topic or Inverse Slides `#` --&gt;
-
-&lt;!-- ## Slide Headings `##` --&gt;
-
-&lt;!-- ### Sub-slide Headings `###` --&gt;
-
-&lt;!-- #### Bold Call-Out `####` --&gt;
-
-&lt;!-- This is a normal paragraph text. Only use header levels 1-4. --&gt;
-
-&lt;!-- ##### Possible, but not recommended `#####` --&gt;
-
-&lt;!-- ###### Definitely don't use h6 `######` --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- # Left-Column Headings --&gt;
-
-&lt;!-- .left-column[ --&gt;
-&lt;!-- ## First --&gt;
-
-&lt;!-- ## Second --&gt;
-
-&lt;!-- ## Third --&gt;
-&lt;!-- ] --&gt;
-
-&lt;!-- .right-column[ --&gt;
-&lt;!-- Dolor quis aptent mus a dictum ultricies egestas. --&gt;
-
-&lt;!-- Amet egestas neque tempor fermentum proin massa! --&gt;
-
-&lt;!-- Dolor elementum fermentum pharetra lectus arcu pulvinar. --&gt;
-&lt;!-- ] --&gt;
-
-&lt;!-- --- --&gt;
-&lt;!-- class: inverse center middle --&gt;
-
-&lt;!-- # Topic Changing Interstitial --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- ``` --&gt;
-&lt;!-- class: inverse center middle --&gt;
-&lt;!-- ``` --&gt;
-
-&lt;!-- --- --&gt;
-&lt;!-- layout: true --&gt;
-
-&lt;!-- ## Blocks --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- ### Blockquote --&gt;
-
-&lt;!-- &gt; This is a blockquote following a header. --&gt;
-&lt;!-- &gt; --&gt;
-&lt;!-- &gt; When something is important enough, you do it even if the odds are not in your favor. --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- ### Code Blocks --&gt;
-
-&lt;!-- #### R Code --&gt;
-
-&lt;!-- ```{r eval=FALSE} --&gt;
-&lt;!-- ggplot(gapminder) + --&gt;
-&lt;!--   aes(x = gdpPercap, y = lifeExp, size = pop, color = country) + --&gt;
-&lt;!--   geom_point() + --&gt;
-&lt;!--   facet_wrap(~year) --&gt;
-&lt;!-- ``` --&gt;
-
-&lt;!-- #### JavaScript --&gt;
-
-&lt;!-- ```js --&gt;
-&lt;!-- var fun = function lang(l) { --&gt;
-&lt;!--   dateformat.i18n = require('./lang/' + l) --&gt;
-&lt;!--   return true; --&gt;
-&lt;!-- } --&gt;
-&lt;!-- ``` --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- ### More R Code --&gt;
-
-&lt;!-- ```{r eval=FALSE} --&gt;
-&lt;!-- dplyr::starwars %&gt;% dplyr::slice_sample(n = 4) --&gt;
-&lt;!-- ``` --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- ```{r message=TRUE, eval=requireNamespace("cli", quietly = TRUE)} --&gt;
-&lt;!-- cli::cli_alert_success("It worked!") --&gt;
-&lt;!-- ``` --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- ```{r message=TRUE} --&gt;
-&lt;!-- message("Just a friendly message") --&gt;
-&lt;!-- ``` --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- ```{r warning=TRUE} --&gt;
-&lt;!-- warning("This could be bad...") --&gt;
-&lt;!-- ``` --&gt;
-
-&lt;!-- -- --&gt;
-
-&lt;!-- ```{r error=TRUE} --&gt;
-&lt;!-- stop("I hope you're sitting down for this") --&gt;
-&lt;!-- ``` --&gt;
-
-
-&lt;!-- --- --&gt;
-&lt;!-- layout: true --&gt;
-
-&lt;!-- ## Tables --&gt;
-
-&lt;!-- --- --&gt;
-&lt;!-- exclude: false --&gt;
-
-&lt;!-- ```{r eval=requireNamespace("tibble", quietly=TRUE)} --&gt;
-&lt;!-- tibble::as_tibble(mtcars) --&gt;
-&lt;!-- ``` --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- ```{r} --&gt;
-&lt;!-- knitr::kable(head(mtcars), format = 'html') --&gt;
-&lt;!-- ``` --&gt;
-
-&lt;!-- --- --&gt;
-&lt;!-- exclude: false --&gt;
-
-&lt;!-- ```{r eval=requireNamespace("DT", quietly=TRUE)} --&gt;
-&lt;!-- DT::datatable(head(mtcars), fillContainer = FALSE, options = list(pageLength = 4)) --&gt;
-&lt;!-- ``` --&gt;
-
-&lt;!-- --- --&gt;
-&lt;!-- layout: true --&gt;
-
-&lt;!-- ## Lists --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- .pull-left[ --&gt;
-&lt;!-- #### Here is an unordered list: --&gt;
-
-&lt;!-- *   Item foo --&gt;
-&lt;!-- *   Item bar --&gt;
-&lt;!-- *   Item baz --&gt;
-&lt;!-- *   Item zip --&gt;
-&lt;!-- ] --&gt;
-
-&lt;!-- .pull-right[ --&gt;
-
-&lt;!-- #### And an ordered list: --&gt;
-
-&lt;!-- 1.  Item one --&gt;
-&lt;!-- 1.  Item two --&gt;
-&lt;!-- 1.  Item three --&gt;
-&lt;!-- 1.  Item four --&gt;
-&lt;!-- ] --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- ### And a nested list: --&gt;
-
-&lt;!-- - level 1 item --&gt;
-&lt;!--   - level 2 item --&gt;
-&lt;!--   - level 2 item --&gt;
-&lt;!--     - level 3 item --&gt;
-&lt;!--     - level 3 item --&gt;
-&lt;!-- - level 1 item --&gt;
-&lt;!--   - level 2 item --&gt;
-&lt;!--   - level 2 item --&gt;
-&lt;!--   - level 2 item --&gt;
-&lt;!-- - level 1 item --&gt;
-&lt;!--   - level 2 item --&gt;
-&lt;!--   - level 2 item --&gt;
-&lt;!-- - level 1 item --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- ### Nesting an ol in ul in an ol --&gt;
-
-&lt;!-- - level 1 item (ul) --&gt;
-&lt;!--   1. level 2 item (ol) --&gt;
-&lt;!--   1. level 2 item (ol) --&gt;
-&lt;!--     - level 3 item (ul) --&gt;
-&lt;!--     - level 3 item (ul) --&gt;
-&lt;!-- - level 1 item (ul) --&gt;
-&lt;!--   1. level 2 item (ol) --&gt;
-&lt;!--   1. level 2 item (ol) --&gt;
-&lt;!--     - level 3 item (ul) --&gt;
-&lt;!--     - level 3 item (ul) --&gt;
-&lt;!--   1. level 4 item (ol) --&gt;
-&lt;!--   1. level 4 item (ol) --&gt;
-&lt;!--     - level 3 item (ul) --&gt;
-&lt;!--     - level 3 item (ul) --&gt;
-&lt;!-- - level 1 item (ul) --&gt;
-
-&lt;!-- --- --&gt;
-&lt;!-- layout: true --&gt;
-
-&lt;!-- ## Plots --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- ```{r plot-example, eval=requireNamespace("ggplot2", quietly=TRUE)} --&gt;
-&lt;!-- library(ggplot2) --&gt;
-&lt;!-- (g &lt;- ggplot(mpg) + aes(hwy, cty, color = class) + geom_point()) --&gt;
-&lt;!-- ``` --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- ```{r plot-example-themed, eval=requireNamespace("showtext", quietly=TRUE) &amp;&amp; requireNamespace("ggplot2", quietly=TRUE)} --&gt;
-&lt;!-- g + xaringanthemer::theme_xaringan(text_font_size = 16, title_font_size = 18) + --&gt;
-&lt;!--   ggtitle("A Plot About Cars") --&gt;
-&lt;!-- ``` --&gt;
-
-&lt;!-- .footnote[Requires `{showtext}`] --&gt;
-
-&lt;!-- --- --&gt;
-&lt;!-- layout: false --&gt;
-
-&lt;!-- ## Square image --&gt;
-
-&lt;!-- &lt;center&gt;&lt;img src="https://octodex.github.com/images/labtocat.png" alt="GithHub Octocat" height="400px" /&gt;&lt;/center&gt; --&gt;
-
-&lt;!-- .footnote[GitHub Octocat] --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- ### Wide image --&gt;
-
-&lt;!-- ![A wide image with a diagram of branching in git.](https://docs.github.com/assets/images/help/repository/branching.png) --&gt;
-
-&lt;!-- .footnote[Wide images scale to 100% slide width] --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- ## Two images --&gt;
-
-&lt;!-- .pull-left[ --&gt;
-&lt;!-- ![A GitHub Octocat, style "mother hubber"](https://octodex.github.com/images/motherhubbertocat.png) --&gt;
-&lt;!-- ] --&gt;
-
-&lt;!-- .pull-right[ --&gt;
-&lt;!-- ![A GitHub Octocat, style "dinotcat"](https://octodex.github.com/images/dinotocat.png) --&gt;
-&lt;!-- ] --&gt;
-
-&lt;!-- --- --&gt;
-
-&lt;!-- ### Definition lists can be used with HTML syntax. --&gt;
-
-&lt;!-- &lt;dl&gt; --&gt;
-&lt;!-- &lt;dt&gt;Name&lt;/dt&gt; --&gt;
-&lt;!-- &lt;dd&gt;Godzilla&lt;/dd&gt; --&gt;
-&lt;!-- &lt;dt&gt;Born&lt;/dt&gt; --&gt;
-&lt;!-- &lt;dd&gt;1952&lt;/dd&gt; --&gt;
-&lt;!-- &lt;dt&gt;Birthplace&lt;/dt&gt; --&gt;
-&lt;!-- &lt;dd&gt;Japan&lt;/dd&gt; --&gt;
-&lt;!-- &lt;dt&gt;Color&lt;/dt&gt; --&gt;
-&lt;!-- &lt;dd&gt;Green&lt;/dd&gt; --&gt;
-&lt;!-- &lt;/dl&gt; --&gt;
-
-&lt;!-- --- --&gt;
-&lt;!-- class: center, middle --&gt;
-
-&lt;!-- # Thanks! --&gt;
-
-&lt;!-- Slides created via the R packages: --&gt;
-
-&lt;!-- [**xaringan**](https://github.com/yihui/xaringan)&lt;br&gt; --&gt;
-&lt;!-- [gadenbuie/xaringanthemer](https://github.com/gadenbuie/xaringanthemer) --&gt;
-
-&lt;!-- The chakra comes from [remark.js](https://remarkjs.com), [**knitr**](http://yihui.name/knitr), and [R Markdown](https://rmarkdown.rstudio.com). --&gt;
+- Put it in an Rmarkdown file.
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
